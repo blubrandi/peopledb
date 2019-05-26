@@ -14,6 +14,7 @@ exports.up = function (knex, Promise) {
                 .string('os', 128).notNullable()
                 .string('text_editor', 128).notNullable()
                 .string('assigned_pm', 128).notNullable()
+                .boolean('student_active').notNullable()
         })
 
         .createTable('project_managers', tbl => {
@@ -25,6 +26,7 @@ exports.up = function (knex, Promise) {
                 .string('email', 128)
                 .string('slack_channel')
                 .string('assigned_sl')
+                .boolean('pm_active').notNullable()
         })
 
         .createTable('section_leads', tbl => {
@@ -43,6 +45,7 @@ exports.up = function (knex, Promise) {
                 .string('pm').unsigned().references('pm_name').inTable('project_managers')
                 .string('note_type', 128).notNullable()
                 .text('note_text').notNullable()
+                .boolean('archived').notNullable()
         })
 }
 
