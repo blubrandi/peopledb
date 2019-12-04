@@ -27,3 +27,4 @@ server.use('/users', usersRouter)
 
 
 module.exports = server
+
