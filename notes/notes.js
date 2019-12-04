@@ -9,7 +9,7 @@ module.exports = {
 };
 
 function find() {
-    return db('notes').select('note_author', 'student', 'pm', 'note_type', 'note_text', 'archived');
+    return db('notes').select('sl_id', 'student_id', 'tl_id', 'note_type', 'note_text', 'archived');
 }
 
 function findBy(filter) {
@@ -18,7 +18,7 @@ function findBy(filter) {
 
 function findById(id) {
     return db('notes')
-        .where({ id }).select('note_author', 'pm', 'note_type', 'note_text')
+        .where({ id }).select('sl_id', 'student_id', 'tl_id', 'note_type', 'note_text')
         .first()
 }
 

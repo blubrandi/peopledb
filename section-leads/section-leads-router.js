@@ -8,7 +8,7 @@ router.get('/', restricted, (req, res) => {
         .then(sls => {
             res.json(sls)
         })
-        .catch(err => res.send(err))
+        .catch(error => res.send(error))
 })
 
 router.post('/', restricted, (req, res) => {
@@ -16,9 +16,9 @@ router.post('/', restricted, (req, res) => {
         .then(sl => {
             res.json(sl)
         })
-        .catch(err => {
-            res.status(500).json({ err: err, message: 'Error' })
+        .catch(error => {
+            res.status(500).json({ error: error, message: 'Error' })
         })
 })
 
-module.exports = router
+module.exports = router;
