@@ -1,12 +1,17 @@
 {
   "name": "peopledb",
   "version": "1.0.0",
-  "description": "A database for organizing people in an organization and keeping notes",
+  "description": "peopleDB",
   "main": "index.js",
   "repository": "https://github.com/blubrandi/peopledb.git",
   "author": "Brandi N Bailey",
   "license": "MIT",
   "private": false,
+  "scripts": {
+      "server": "nodemon index.js",
+    "start": "node index.js",
+    "heroku-postbuild": "npm install --production && knex migrate:latest"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
@@ -19,11 +24,11 @@
     "pg": "^7.11.0",
     "sqlite3": "^4.0.8"
   },
-  "scripts": {
-    "server": "nodemon index.js",
-    "start": "node index.js"
-  },
   "devDependencies": {
     "nodemon": "^1.19.1"
+  },
+  "engines": {
+    "node": "10.15.3",
+    "npm": "6.10.3"
   }
 }

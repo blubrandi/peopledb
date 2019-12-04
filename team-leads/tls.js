@@ -10,33 +10,33 @@ module.exports = {
 };
 
 function find() {
-    return db('project_managers').select('pm_name', 'github_username', 'email', 'slack_channel', 'assigned_sl', 'pm_active');
+    return db('team_leads').select('tl_name', 'github_username', 'email', 'slack_channel', 'sl_id', 'tl_active');
 }
 
 function findBy(filter) {
-    return db('project_managers').where(filter);
+    return db('team_leads').where(filter);
 }
 
 function findById(id) {
-    return db('project_managers')
+    return db('team_leads')
         .where({ id })
         .first();
 }
 
-async function add(pm) {
-    const [id] = await db('project_managers').insert(pm);
+async function add(tl) {
+    const [id] = await db('team_leads').insert(tl);
 
     return findById(id);
 }
 
 function update(id, changes) {
-    return db('project_managers')
+    return db('team_leads')
         .where({ id })
         .update(changes);
 }
 
 function remove(id) {
-    return db('project_managers')
+    return db('team_leads')
         .where('id', id)
         .del();
 }
