@@ -11,7 +11,7 @@ module.exports = {
 };
 
 function find() {
-    return db('students').select('id', 'student_name', 'github_username', 'tz', 'sprint_group', 'os', 'text_editor', 'assigned_pm', 'student_active');
+    return db('students').select('id', 'student_name', 'github_username', 'tz', 'sprint_group', 'os', 'text_editor', 'tl_id', 'student_active');
 }
 
 function findBy(filter) {

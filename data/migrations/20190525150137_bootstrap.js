@@ -1,71 +1,111 @@
-
-exports.up = function (knex, Promise) {
-
+exports.up = function(knex, Promise) {
     return knex.schema
 
-        .createTable('students', tbl => {
-            tbl.increments()
+        .createTable("users", usersColumn => {
+            usersColumn.increments().primary();
 
-            tbl
-                .string('student_name', 128).notNullable()
-                .string('github_username', 128).notNullable()
-                .string('tz', 3)
-                .integer('sprint_group').notNullable()
-                .string('os', 128).notNullable()
-                .string('text_editor', 128).notNullable()
-                .string('assigned_pm', 128).unsigned().references('pm_name').inTable('project_managers')
-                .boolean('student_active').notNullable()
+            usersColumn
+                .text("username")
+                .unique()
+                .notNullable();
+
+            usersColumn.text("name").notNullable();
+
+            usersColumn.text("password").notNullable();
+
+            usersColumn.text("role").notNullable();
+        })
+        
+        .createTable("section_leads", sectionLeadsColumn => {
+            sectionLeadsColumn.increments().primary();
+
+            sectionLeadsColumn
+                .integer("user_id")
+                .unsigned()
+                .references("id")
+                .inTable("users");
+
+            sectionLeadsColumn.text("github_username");
+
+            sectionLeadsColumn.text("email");
+        })
+        
+        .createTable("team_leads", teamLeadsColumn => {
+            teamLeadsColumn.increments().primary();
+
+            teamLeadsColumn.text("tl_name").notNullable();
+
+            teamLeadsColumn.text("github_username").notNullable();
+
+            teamLeadsColumn.text("email");
+
+            teamLeadsColumn.text("slack_channel");
+
+            teamLeadsColumn
+                .integer("sl_id")
+                .unsigned()
+                .references("id")
+                .inTable("section_leads");
+
+            teamLeadsColumn.boolean("tl_active").notNullable();
         })
 
-        .createTable('project_managers', tbl => {
-            tbl.increments()
+        .createTable("students", studentsColumn => {
+            studentsColumn.increments().primary();
 
-            tbl
-                .string('pm_name', 128).notNullable()
-                .string('github_username', 128).notNullable()
-                .string('email', 128)
-                .string('slack_channel')
-                .string('assigned_sl').unsigned().references('sl_name').inTable('section_leads')
-                .boolean('pm_active').notNullable()
+            studentsColumn.text("student_name").notNullable();
+
+            studentsColumn.text("github_username").notNullable();
+
+            studentsColumn.text("tz", 3);
+
+            studentsColumn.integer("sprint_group").notNullable();
+
+            studentsColumn.text("os").notNullable();
+
+            studentsColumn.text("text_editor").notNullable();
+
+            studentsColumn
+                .integer("tl_id")
+                .unsigned()
+                .references("id")
+                .inTable("team_leads");
+
+            studentsColumn.boolean("student_active").notNullable();
         })
+        
+        .createTable("notes", notesColumn => {
+            notesColumn.increments().primary();
 
-        .createTable('notes', tbl => {
-            tbl.increments()
+            notesColumn
+                .integer("sl_id")
+                .unsigned()
+                .references("id")
+                .inTable("section_leads");
 
-            tbl
-                .string('note_author', 128).unsigned().references('sl_name').inTable('section_leads')
-                .string('student').unsigned().references('student_name').inTable('students')
-                .string('pm').unsigned().references('pm_name').inTable('project_managers')
-                .string('note_type', 128).notNullable()
-                .text('note_text').notNullable()
-                .boolean('archived').notNullable()
-        })
+            notesColumn.integer("tl_id");
 
-        .createTable('users', tbl => {
-            tbl.increments()
+            notesColumn
+                .integer("student_id")
+                .unsigned()
+                .references("id")
+                .inTable("students");
 
-            tbl
-                .string('username', 128).unique().notNullable()
-                .string('name', 128).notNullable()
-                .string('password', 128).notNullable()
-                .string('role').notNullable()
-        })
 
-        .createTable('section_leads', tbl => {
-            tbl.increments()
+            notesColumn.text("note_type").notNullable();
 
-            tbl
-                .string('sl_name', 128).references('name').inTable('users')
-        })
-}
+            notesColumn.text("note_text").notNullable();
 
-exports.down = function (knex, Promise) {
+            notesColumn.boolean("archived").notNullable();
+        });
+};
 
+exports.down = function(knex, Promise) {
     return knex.schema
+        .dropTableIfExists("notes")
+        .dropTableIfExists("students")
+        .dropTableIfExists("team_leads")
+        .dropTableIfExists("section_leads")
+        .dropTableIfExists("users")
 
-        .dropTableIfExists('students')
-        .dropTableIfExists('project_managers')
-        .dropTableIfExists('notes')
-        .dropTableIfExists('users')
-        .dropTableIfExists('section_leads')
 };

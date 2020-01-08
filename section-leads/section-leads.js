@@ -8,7 +8,7 @@ module.exports = {
 };
 
 function find() {
-    return db('section_leads').select('id', 'sl_name');
+    return db('section_leads').select('id', 'user_id', "github_username", "email");
 }
 
 function findBy(filter) {
